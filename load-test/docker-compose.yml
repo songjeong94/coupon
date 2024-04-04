@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  master:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+
+#   localhost에서 8080 포트로 해당 테스트를 요청 8080은 yml에서 지정해준 coupon-api
+    command: -f /mnt/locust/locustfile-hello.py --master -H http://host.docker.internal:8080
+
+  # locust 에서 작업될 테스트 내용
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile-hello.py --worker --master-host master
