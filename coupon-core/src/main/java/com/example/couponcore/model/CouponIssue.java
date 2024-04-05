@@ -31,8 +31,6 @@ public class CouponIssue extends BaseTimeEntity{
     @CreatedDate
     private LocalDateTime dateIssued;
 
-    @Column(nullable = false)
-
     private LocalDateTime dateUsed;
 
 }
