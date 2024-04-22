@@ -28,6 +28,19 @@ public class CouponIssueService {
         saveCouponIssue(couponId, userId);
     }
 
+    //문제점 발생
+    /*
+    lock 획득
+
+    트랜잭션 시작
+    Coupon coupon = findCoupon(couponId);
+    coupon.issue();
+    saveCouponIssue(couponId, userId);
+    트랜잭션 커밋
+
+    lock 반납
+     */
+
     @Transactional(readOnly = true)
     public Coupon findCoupon(long couponId) {
         return couponJpaRepository.findById(couponId).orElseThrow(() -> {
