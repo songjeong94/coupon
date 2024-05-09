@@ -9,6 +9,7 @@ import com.example.couponcore.repository.mysql.CouponJpaRepository;
 import com.example.couponcore.repository.redis.dto.CouponIssueRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.jdt.internal.compiler.ast.AssertStatement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

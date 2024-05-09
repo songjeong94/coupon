@@ -3,6 +3,7 @@ package com.example.couponcore.service;
 import com.example.couponcore.model.Coupon;
 import com.example.couponcore.repository.redis.dto.CouponRedisEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,10 @@ public class CouponCacheService {
         Coupon coupon = couponIssueService.findCoupon(couponId);
         return new CouponRedisEntity(coupon);
     }
+
+    @CachePut(cacheNames = "coupon")
+    public CouponRedisEntity putCouponCache(long couponId) {
+        return getCouponCache(couponId);
+    }
+
 }
