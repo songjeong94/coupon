@@ -1,10 +1,13 @@
 package com.example.couponcore.service;
 
+import com.example.couponcore.exception.CouponIssueException;
 import com.example.couponcore.repository.redis.RedisRepository;
-import com.example.couponcore.util.CouponRedisUtils;
+import com.example.couponcore.repository.redis.dto.CouponRedisEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.example.couponcore.exception.ErrorCode.DUPLICATED_COUPON_ISSUE;
+import static com.example.couponcore.exception.ErrorCode.INVALID_COUPON_ISSUE_QUANTITY;
 import static com.example.couponcore.util.CouponRedisUtils.*;
 
 @RequiredArgsConstructor
@@ -12,6 +15,15 @@ import static com.example.couponcore.util.CouponRedisUtils.*;
 public class CouponIssueRedisService {
 
     private final RedisRepository redisRepository;
+
+    public void checkCouponIssueQuantity(CouponRedisEntity coupon, long userId) {
+        if (!availableTotalIssueQuantity(coupon.totalQuantity(), coupon.id())) {
+            throw new CouponIssueException(INVALID_COUPON_ISSUE_QUANTITY, "발급 가능한 수량을 초과합니다. couponId: %s, userId: %s".formatted(coupon.id(), userId));
+        }
+        if (!availableUserIssueQuantity(coupon.id(), userId)) {
+            throw new CouponIssueException(DUPLICATED_COUPON_ISSUE, "이미 발급 요청이 처리됐습니다.. couponId: %s, userId: %s".formatted(coupon.id(), userId));
+        }
+    }
 
     public boolean availableTotalIssueQuantity(Integer totalQuantity, long couponId) {
         if (totalQuantity == null){
