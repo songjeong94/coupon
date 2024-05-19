@@ -36,7 +36,7 @@ public class AsyncCouponIssueServiceV1 {
 //        // 4. 쿠폰 발급 queue에 적재
 //    }
 
-    public void issue(long userId, long couponId) {
+    public void issue(long couponId, long userId) {
         CouponRedisEntity coupon = couponCacheService.getCouponCache(couponId);
         coupon.checkIssuableCoupon();
 
@@ -46,7 +46,14 @@ public class AsyncCouponIssueServiceV1 {
         });
     }
 
-    private void issueRequest(long userId, long couponId) {
+    /*
+    1. return totalQuantity > redisRepository.sCard(key); // 쿠폰 발급 수량 제어
+    2. return !redisRepository.sIsMember(key, String.valueOf(userId)); // 중복 발급 요청 제어
+    3. redisRepository.sAdd // 쿠폰 발급 요청 저장
+    4. redisRepository.rPush // 쿠폰 발급 큐 적재
+     */
+
+    private void issueRequest(long couponId, long userId) {
         CouponIssueRequest issueRequest = new CouponIssueRequest(couponId, userId);
         try {
             String value = objectMapper.writeValueAsString(issueRequest);
