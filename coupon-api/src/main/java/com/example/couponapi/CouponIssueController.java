@@ -1,4 +1,4 @@
-package com.example.couponapi.controller;
+package com.example.couponapi;
 
 import com.example.couponapi.controller.dto.CouponIssueRequestDto;
 import com.example.couponapi.controller.dto.CouponIssueResponseDto;
